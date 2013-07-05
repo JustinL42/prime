@@ -1,4 +1,5 @@
 #module for calculating and accessing primes, etc.
+import math
 
 #two is the first prime, given here as an example 
 #and to aviod checking if these are empty
@@ -17,11 +18,11 @@ MAX_LIST_SIZE = 1000000
 MAX_SET_SIZE = 1000
 
 def prime_gen(upto):
-  '''
-  calculates the primes lower than upto (inclusively) 
-  and stores them in prime_list. Returns None
-  '''
-  None
+    '''
+    calculates the primes lower than upto (inclusively) 
+    and stores them in prime_list. Returns None
+    '''
+
 
 def latest_prime():
   '''
