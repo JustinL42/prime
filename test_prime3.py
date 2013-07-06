@@ -7,7 +7,7 @@ class test_prime_gen(unittest.TestCase):
     
 
     def setUp(self):
-        prime3.prime_list = [2]
+        prime3.reset()
         
     def test_small_list_generation(self):
         prime3.prime_gen(10)
@@ -36,7 +36,7 @@ class test_prime_gen(unittest.TestCase):
 class test_latest_prime(unittest.TestCase):
 
     def setUp(self):
-        prime3.prime_list = [2]
+        prime3.reset()
         
     def test_prime(self):
         prime3.prime_gen(7)
@@ -54,7 +54,7 @@ class test_latest_prime(unittest.TestCase):
 class test_nth_prime(unittest.TestCase):
 
     def setUp(self):
-        prime3.prime_list = [2]
+        prime3.reset()
         
     def test_1st_prime(self):
         self.assertEquals(2, prime3.nth_prime(1))
@@ -66,7 +66,7 @@ class test_nth_prime(unittest.TestCase):
 class test_is_prime(unittest.TestCase):
 
     def setUp(self):
-        prime3.prime_list = [2]
+        prime3.reset()
         
     def test_a_prime(self):
         self.assertTrue(prime3.is_prime(541))
@@ -78,7 +78,7 @@ class test_is_prime(unittest.TestCase):
 class test_get_ordinal(unittest.TestCase):
 
     def setUp(self):
-        prime3.prime_list = [2]
+        prime3.reset()
         
     def test_normal_usage(self):
         prime3.prime_gen(541)
@@ -92,7 +92,7 @@ class test_get_ordinal(unittest.TestCase):
 class test_largest_under(unittest.TestCase):
 
     def setUp(self):
-        prime3.prime_list = [2]
+        prime3.reset()
         
     def test_prime(self):
         self.assertEqual(541, prime3.largest_under(547))
@@ -103,13 +103,13 @@ class test_largest_under(unittest.TestCase):
         self.assertEqual(5, prime3.largest_under(6))
         
     def test_two(self):
-        self.assertRaises(Exception, prime3.largest_under(2))
+        self.assertRaises(prime3.largest_under(2), Exception)
         
 
 class test_factorize(unittest.TestCase):
 
     def setUp(self):
-        prime3.prime_list = [2]
+        prime3.reset()
         
     def test_small(self):
         results = prime3.factorize(56)
@@ -132,17 +132,17 @@ class test_factorize(unittest.TestCase):
         self.assertEquals(results, expected)
         
     def test_zero(self):
-        self.assertRaises(Exception, prime3.factorize(0))
+        self.assertRaises(prime3.factorize(0), Exception)
 
   
 class test_combine(unittest.TestCase):
 
     def setUp(self):
-        prime3.prime_list = [2]
+        prime3.reset()
         
     def test_large(self):
         number = {541:1, 547:1}
-        self.assertEqual(295927, prime3.combine(number))
+        self.assertEquals(295927, prime3.combine(number))
         
 class test_index(unittest.TestCase):
     def setUp(self):
@@ -153,6 +153,17 @@ class test_index(unittest.TestCase):
         
     def test_composite(self):
         self.assertEquals(100-1, prime3.index(542))
+        
+class test_reset(unittest.TestCase):
+    
+    def setUp(self):
+        prime3.prime_gen(10)
+        
+    def test_values_reset(self):
+        prime3.reset()
+        self.assertEquals([2], prime3.prime_list)
+        self.assertEquals(2, prime3.latest_upto)
+        self.assertEquals({2:1}, prime3.ordinal_index)
 
 
 if __name__ == '__main__':

@@ -119,18 +119,41 @@ def largest_under(number):
     return latest_prime()
   i = index(number)
   if number == prime_list[i]:
-    return i-1
+    return prime_list[i-1]
   else:
-    return i
+    return prime_list[i]
   
-def factorize(int):
+def factorize(integer):
   '''
   returns a factorized form the number as a dictionary with 
   prime factors as keys and the exponents as values. 
   E.g. 12 would be {2:2, 3:1}. 
   Returns empty dictionaries for 1. 
   '''
-  None
+  if type(integer) != int or integer < 1:
+    raise Exception
+    
+  factors = dict()
+  least_possible_factor = 2
+  number = integer
+  
+  n = 1
+  while n <= number//least_possible_factor:
+    prime = nth_prime(n)
+    if number%prime == 0:
+        exponent = 0
+        while number%prime == 0:
+            number //= prime
+            exponent += 1
+        factors[prime] = exponent
+        least_possible_factor = nth_prime(n+1)
+        
+    n += 1
+    
+  if number != 1:
+    factors[number] = 1
+    
+  return factors
   
 def combine(factors):
   '''
@@ -138,9 +161,9 @@ def combine(factors):
   '''
   if type(factors) != dict:
     raise Exception
-  total = 0
+  total = 1
   for (prime, exponent) in factors.items():
-    total += prime**exponent
+    total *= prime**exponent
   return total
   
 def index(number):
@@ -166,5 +189,18 @@ def index(number):
         return result
     else:
         return result-1
+        
+def reset():
+    '''
+    returns module variables to there initial state.
+    Useful for testing
+    '''
+    global prime_list
+    global ordinal_index
+    global latest_upto
+    
+    prime_list = [2]
+    ordinal_index = {2:1}
+    latest_upto = 2
   
   
