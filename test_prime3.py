@@ -86,7 +86,8 @@ class test_get_ordinal(unittest.TestCase):
     
     def test_composite_request(self):
         prime3.prime_gen(10)
-        self.assertRaises(prime3.get_ordinal(8), Exception)
+        with self.assertRaises(Exception):
+            prime3.get_ordinal(8)
 
   
 class test_largest_under(unittest.TestCase):
@@ -103,7 +104,8 @@ class test_largest_under(unittest.TestCase):
         self.assertEqual(5, prime3.largest_under(6))
         
     def test_two(self):
-        self.assertRaises(prime3.largest_under(2), Exception)
+        with self.assertRaises(Exception):
+            prime3.largest_under(2)
         
 
 class test_factorize(unittest.TestCase):
@@ -132,7 +134,8 @@ class test_factorize(unittest.TestCase):
         self.assertEquals(results, expected)
         
     def test_zero(self):
-        self.assertRaises(prime3.factorize(0), Exception)
+        with self.assertRaises(Exception):
+            prime3.factorize(0)
 
   
 class test_combine(unittest.TestCase):
