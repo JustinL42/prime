@@ -41,15 +41,15 @@ class test_latest_prime(unittest.TestCase):
         
     def test_prime(self):
         prime3.prime_gen(7)
-        self.assertEquals(7, prime3.latest_prime())
+        self.assertEqual(7, prime3.latest_prime())
         
     def test_composite(self):
         prime3.prime_gen(10)
-        self.assertEquals(7, prime3.latest_prime())
+        self.assertEqual(7, prime3.latest_prime())
         
     def test_twin_prime(self):
         prime3.prime_gen(18)
-        self.assertEquals(17, prime3.latest_prime())
+        self.assertEqual(17, prime3.latest_prime())
     
   
 class test_nth_prime(unittest.TestCase):
@@ -58,13 +58,13 @@ class test_nth_prime(unittest.TestCase):
         prime3.reset()
         
     def test_1st_prime(self):
-        self.assertEquals(2, prime3.nth_prime(1))
+        self.assertEqual(2, prime3.nth_prime(1))
         
     def test_100th_prime(self):
-        self.assertEquals(541, prime3.nth_prime(100))
+        self.assertEqual(541, prime3.nth_prime(100))
         
     def test_float(self):
-        with self.assertRaise(Exception):
+        with self.assertRaises(Exception):
             prime3.nth_prime(13.7)
     
   
@@ -80,7 +80,7 @@ class test_is_prime(unittest.TestCase):
         self.assertFalse(prime3.is_prime(541*547))
         
     def test_float(self):
-        with self.assertRaise(Exception):
+        with self.assertRaises(Exception):
             prime3.is_prime(13.7)
 
   
@@ -91,15 +91,15 @@ class test_get_ordinal(unittest.TestCase):
         
     def test_normal_usage(self):
         prime3.prime_gen(541)
-        self.assertEquals(prime3.get_ordinal(541), 100)
+        self.assertEqual(prime3.get_ordinal(541), 100)
     
     def test_composite_request(self):
         prime3.prime_gen(10)
-        with self.assertRaise(Exception):
+        with self.assertRaises(Exception):
             prime3.get_ordinal(8)
             
     def test_float(self):
-        with self.assertRaise(Exception):
+        with self.assertRaises(Exception):
             prime3.get_ordinal(13.7)
 
   
@@ -117,7 +117,7 @@ class test_largest_under(unittest.TestCase):
         self.assertEqual(5, prime3.largest_under(6))
         
     def test_two(self):
-        with self.assertRaise(Exception):
+        with self.assertRaises(Exception):
             prime3.largest_under(2)
             
     def test_float(self):
@@ -132,7 +132,7 @@ class test_factorize(unittest.TestCase):
     def test_small(self):
         results = prime3.factorize(56)
         expected = {2:3, 7:1}
-        self.assertEquals(results, expected)
+        self.assertEqual(results, expected)
         
     def test_large(self):
         results = prime3.factorize(295927)
@@ -142,23 +142,23 @@ class test_factorize(unittest.TestCase):
     def test_prime(self):
         results = prime3.factorize(7)
         expected = {7:1}
-        self.assertEquals(results, expected)
+        self.assertEqual(results, expected)
         
     def test_one(self):
         results = prime3.factorize(1)
         expected = {}
-        self.assertEquals(results, expected)
+        self.assertEqual(results, expected)
         
     def test_zero(self):
-        with self.assertRaise(Exception):
+        with self.assertRaises(Exception):
             prime3.factorize(0)
 
     def test_float(self):
-        with self.assertRaise(Exception):
+        with self.assertRaises(Exception):
             prime3.factorize(13.7)
             
     def test_negative(self):
-        with self.assertRaise(Exception):
+        with self.assertRaises(Exception):
             prime3.factorize(-6)
   
 class test_combine(unittest.TestCase):
@@ -168,20 +168,20 @@ class test_combine(unittest.TestCase):
         
     def test_large(self):
         number = {541:1, 547:1}
-        self.assertEquals(295927, prime3.combine(number))
+        self.assertEqual(295927, prime3.combine(number))
         
 class test_index(unittest.TestCase):
     def setUp(self):
         prime3.prime_gen(600)
         
     def test_prime(self):
-        self.assertEquals(100-1, prime3.index(541))
+        self.assertEqual(100-1, prime3.index(541))
         
     def test_composite(self):
-        self.assertEquals(100-1, prime3.index(542))
+        self.assertEqual(100-1, prime3.index(542))
         
     def test_float(self):
-        self.assertEquals(100-1, prime3.index(541.5))
+        self.assertEqual(100-1, prime3.index(541.5))
         
 class test_reset(unittest.TestCase):
     
@@ -190,9 +190,9 @@ class test_reset(unittest.TestCase):
         
     def test_values_reset(self):
         prime3.reset()
-        self.assertEquals([2], prime3.prime_list)
-        self.assertEquals(2, prime3.latest_upto)
-        self.assertEquals({2:1}, prime3.ordinal_index)
+        self.assertEqual([2], prime3.prime_list)
+        self.assertEqual(2, prime3.latest_upto)
+        self.assertEqual({2:1}, prime3.ordinal_index)
 
 if __name__ == '__main__':
     unittest.main()

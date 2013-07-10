@@ -1,6 +1,6 @@
 #module for calculating and accessing primes, etc.
 from sys import getsizeof
-from math import ceil
+from math import ceil, floor
 
 
 #two is the first prime, given here as an example 
@@ -12,11 +12,10 @@ ordinal_index = {2:1}
 #all primes below this number have been found (inclusively)
 latest_upto = 2
 
-#used to change prime indexing behavior
+#used to change prime indexing behavior. TODO
 index_policy = 0
 
 #todo: optomize these number while being safe
-MAX_LIST_SIZE = 1000000
 MAX_SET_SIZE = 100000000000000
 
 def prime_gen(upto):
@@ -24,20 +23,27 @@ def prime_gen(upto):
     calculates the primes lower than upto (inclusively) 
     and stores them in prime_list. Returns None
     '''
+    try:
+        float(upto)
+        assert upto > 0
+    except:
+        raise Exception
+        
+    global prime_list
+    global latest_upto
     if upto > latest_upto:
-        global prime_list
-        global latest_upto
+
         numset = set()
-        while upto > latest_upto:
+        while floor(upto) > latest_upto:
             startnum = latest_upto + 1
             numset.clear()
             
             #generate the set of next numbers 
             #as high as memory allows
-            for num in range(startnum, min(upto+1, startnum**2)):
+            for num in range(startnum, min(int(upto+1), startnum**2)):
                 if getsizeof(numset) > MAX_SET_SIZE:
-                    print('length = {} and size {} bytes'.format(len(numset), getsizeof(numset)))
                     break
+                    
                 numset.add(num)
             
             endnum = startnum+len(numset)-1
@@ -47,7 +53,6 @@ def prime_gen(upto):
                 first_composite = max(ceil(startnum/prime)*prime, prime**2)
                 numset -= set(range(first_composite, endnum+1, prime))
                 
-            global prime_list
             prime_list.extend(numset)
             latest_upto = endnum
             
@@ -63,8 +68,12 @@ def nth_prime(n):
   '''
   returns the nth prime number (2 is the 1st prime, etc.)
   '''
-  if type(n) != int:
+  try:
+    int(n)
+    assert n >= 1
+  except:
     raise Exception
+      
   upto = 2*max(n, latest_upto)
   while len(prime_list) < n:
     prime_gen(upto)
@@ -76,13 +85,16 @@ def is_prime(integer):
   '''
   returns true if integer is prime
   '''
-  if type(integer) != int:
+  if type(integer) != int or integer < 1:
     raise Exception
+      
   if integer in ordinal_index:
     return True
+    
   if integer > latest_upto:
     prime_gen(integer)
     return integer == latest_prime()
+    
   i = index(integer)
   return integer == prime_list[i]
   
@@ -90,8 +102,16 @@ def get_ordinal(prime):
   '''
   returns the ordinal of a given prime (2 is the 1st prime, etc.)
   '''
+  try:
+    int(prime)
+    assert prime >= 1
+  except:
+    raise Exception
+  
+  global ordinal_index
   if prime in ordinal_index:
     return ordinal_index[prime]
+    
   if prime > latest_prime():
     prime_gen(prime)
     if latest_prime() != prime:
@@ -101,8 +121,8 @@ def get_ordinal(prime):
     i = index(prime)
     if prime_list[i] != prime:
         raise Exception
+        
   ordinal = i + 1
-  global ordinal_index
   ordinal_index[prime] = ordinal
   return ordinal
   
@@ -110,13 +130,19 @@ def largest_under(number):
   '''
   returns the largest prime below number
   '''
-  if number <= 2:
+  try:
+    float(number)
+    assert number > 2
+  except:
     raise Exception
+
   if number in ordinal_index:
     return prime_list[ordinal_index[number]-1]
+    
   if number > latest_upto:
     prime_gen(number-1)
     return latest_prime()
+    
   i = index(number)
   if number == prime_list[i]:
     return prime_list[i-1]
@@ -145,6 +171,7 @@ def factorize(integer):
         while number%prime == 0:
             number //= prime
             exponent += 1
+            
         factors[prime] = exponent
         least_possible_factor = nth_prime(n+1)
         
@@ -157,13 +184,18 @@ def factorize(integer):
   
 def combine(factors):
   '''
-  returns and integer by reverses the factorize function, 
+  returns and integer by reverses the factorize function.
   '''
   if type(factors) != dict:
     raise Exception
+    
   total = 1
   for (prime, exponent) in factors.items():
-    total *= prime**exponent
+    try:
+      total *= prime**exponent
+    except:
+      raise Exception('Unexpected contents in factors')
+    
   return total
   
 def index(number):
@@ -171,14 +203,21 @@ def index(number):
     returns the index of number in the prime_list, 
     or the index of the prime below it
     '''
-    if number < 2 or number > latest_prime():
+    try:
+        float(number)
+        assert number >= 2
+        assert number <= latest_upto
+    except:
         raise Exception
+        
     def search(start, end):
         if start == end:
             return start
+            
         middle = start + (end-start)//2
         if prime_list[middle] == number:
             return middle
+            
         if prime_list[middle] < number:
             return search(middle+1, end)
         else:
