@@ -184,7 +184,6 @@ class test_index(unittest.TestCase):
         self.assertEqual(100-1, prime3.index(541.5))
         
 class test_reset(unittest.TestCase):
-    
     def setUp(self):
         prime3.prime_gen(10)
         
@@ -193,6 +192,22 @@ class test_reset(unittest.TestCase):
         self.assertEqual([2], prime3.prime_list)
         self.assertEqual(2, prime3.latest_upto)
         self.assertEqual({2:1}, prime3.ordinal_index)
+        
+class test_ordinal_index(unittest.TestCase):
+    def setUp(self):
+        prime3.reset()
+        
+    def test_policy_1(self):
+        prime3.index_policy = 1
+        prime3.largest_under(10)
+        prime3.get_ordinal(13)
+        prime3.is_prime(17)
+        self.assertEqual({2:1, 7:4, 13:6, 17:7}, prime3.ordinal_index)
+        
+    def test_policy_2(self):
+        prime3.index_policy = 2
+        prime3.prime_gen(10)
+        self.assertEqual({2:1, 3:2, 5:3, 7:4}, prime3.ordinal_index)
 
 if __name__ == '__main__':
     unittest.main()

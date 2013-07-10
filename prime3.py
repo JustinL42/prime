@@ -12,7 +12,10 @@ ordinal_index = {2:1}
 #all primes below this number have been found (inclusively)
 latest_upto = 2
 
-#used to change prime indexing behavior. TODO
+#used to change prime indexing behavior. 
+#0: no indexing
+#1: index for specific functions
+#2: index all primes
 index_policy = 0
 
 #todo: optomize these number while being safe
@@ -39,7 +42,6 @@ def prime_gen(upto):
             numset.clear()
             
             #generate the set of next numbers 
-            #as high as memory allows
             for num in range(startnum, min(int(upto+1), startnum**2)):
                 if getsizeof(numset) > MAX_SET_SIZE:
                     break
@@ -57,6 +59,9 @@ def prime_gen(upto):
             latest_upto = endnum
             
         prime_list.sort()
+        if index_policy >= 2:
+            for i in range(0, len(prime_list)):
+                ordinal_index[prime_list[i]] = i+1
 
 def latest_prime():
   '''
@@ -87,16 +92,25 @@ def is_prime(integer):
   '''
   if type(integer) != int or integer < 1:
     raise Exception
-      
+  
+  global ordinal_index
   if integer in ordinal_index:
     return True
-    
+  
   if integer > latest_upto:
     prime_gen(integer)
-    return integer == latest_prime()
+    if integer == latest_prime():
+      if index_policy >= 1:
+        ordinal_index[integer] = len(prime_list)
+        
+      return True
     
   i = index(integer)
-  return integer == prime_list[i]
+  if integer == prime_list[i]:
+    if index_policy >= 1:
+      ordinal_index[integer] = i+1
+      
+    return True
   
 def get_ordinal(prime):
   '''
@@ -123,7 +137,9 @@ def get_ordinal(prime):
         raise Exception
         
   ordinal = i + 1
-  ordinal_index[prime] = ordinal
+  if index_policy >= 1:
+    ordinal_index[prime] = ordinal
+    
   return ordinal
   
 def largest_under(number):
@@ -136,18 +152,24 @@ def largest_under(number):
   except:
     raise Exception
 
+  global ordinal_index
   if number in ordinal_index:
     return prime_list[ordinal_index[number]-1]
     
   if number > latest_upto:
     prime_gen(number-1)
+    if index_policy >= 1:
+        ordinal_index[latest_prime()] = len(prime_list)
     return latest_prime()
     
   i = index(number)
   if number == prime_list[i]:
-    return prime_list[i-1]
-  else:
-    return prime_list[i]
+    i -=1
+
+  if index_policy >= 1:
+    ordinal_index[i+1] = prime_list[i]
+    
+  return prime_list[i]
   
 def factorize(integer):
   '''
