@@ -250,6 +250,42 @@ def index(number):
         return result
     else:
         return result-1
+
+def factor_list(integer):
+    '''
+    returns the list natural numbers that divide evenly 
+    into the given integer, including one and the integer itself.
+    The factors are given ascending order and each factor is only listed once.
+    '''
+
+    if type(integer) != int or integer < 1:
+        raise Exception
+
+    half_int = integer//2
+
+    if half_int > latest_upto:
+        prime_gen(half_int)
+
+    prime_factors = factorize(integer)
+    base_factors = [1]
+    all_factors = [1]
+
+    for prime, exponent in prime_factors.items():
+        for power in range(1, exponent+1):
+            base_factors.append(prime**power)
+
+    while len(base_factors):
+        factor1 = base_factors.pop()
+
+        for factor2 in base_factors:
+            all_factors.append(factor1*factor2)
+
+    if all_factors[-1] != integer:
+        all_factors.append(integer)
+
+    all_factors.sort()
+    return all_factors
+    
         
 def reset():
     '''

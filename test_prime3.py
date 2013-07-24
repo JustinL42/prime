@@ -20,14 +20,14 @@ class test_prime_gen(unittest.TestCase):
         self.assertEqual(len(prime3.prime_list), primes_under_1k)
         self.assertEqual(prime3.prime_list[-3:], last_three)
 
-    def test_large_list_generation(self):
-        prime3.prime_gen(15485863)
+    # def test_large_list_generation(self):
+        # prime3.prime_gen(15485863)
         
-        primes_under_15485863 = 1000000
-        last_three = [15485849, 15485857, 15485863]
+        # primes_under_15485863 = 1000000
+        # last_three = [15485849, 15485857, 15485863]
         
-        self.assertEqual(len(prime3.prime_list), primes_under_15485863)
-        self.assertEqual(prime3.prime_list[-3:], last_three)
+        # self.assertEqual(len(prime3.prime_list), primes_under_15485863)
+        # self.assertEqual(prime3.prime_list[-3:], last_three)
         
     def test_float(self):
         prime3.prime_gen(14.7)
@@ -208,6 +208,31 @@ class test_ordinal_index(unittest.TestCase):
         prime3.index_policy = 2
         prime3.prime_gen(10)
         self.assertEqual({2:1, 3:2, 5:3, 7:4}, prime3.ordinal_index)
+
+class test_factor_list(unittest.TestCase):
+    def setUp(self):
+        prime3.reset()
+
+    def test_prime(self):
+        lst = prime3.factor_list(23)
+        self.assertEqual(lst, [1, 23])
+    def test_factorial(self):
+        lst = prime3.factor_list(120)
+        true_lst = [1, 2, 3, 4, 5, 6, 8, 10, 12, 15, 20, 24, 30, 40, 60, 120]
+        self.assertEqual(lst, true_lst)
+
+    def test_square(self):
+        lst = prime3.factor_list(25)
+        self.assertEqual(lst, [1, 5, 25])
+
+    def test_large(self):
+        lst = prime3.factor_list(300)
+        true_lst = [1, 2, 3, 4, 5, 6, 10, 12, 15, 20, 25, 30, 50, 60, 75, 100, 150, 300]
+        self.assertEqual(lst, true_lst)
+        
+    def test_float(self):
+        with self.assertRaises(Exception):
+            prime3.factor_list(13.7)
 
 if __name__ == '__main__':
     unittest.main()
