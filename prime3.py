@@ -1,6 +1,7 @@
 #module for calculating and accessing primes, etc.
 from sys import getsizeof
 from math import ceil, floor
+from Combinatorics.combinatorics import m_way_unordered_combinations
 
 
 #two is the first prime, given here as an example 
@@ -18,7 +19,7 @@ latest_upto = 2
 #2: index all primes
 index_policy = 0
 
-#todo: optomize these number while being safe
+#todo: optimize these number while being safe
 MAX_SET_SIZE = 100000000000000
 
 def prime_gen(upto):
@@ -267,24 +268,24 @@ def factor_list(integer):
         prime_gen(half_int)
 
     prime_factors = factorize(integer)
-    base_factors = [1]
-    all_factors = [1]
+    base_factors = []
+    all_factors = {1, integer}
 
     for prime, exponent in prime_factors.items():
-        for power in range(1, exponent+1):
-            base_factors.append(prime**power)
+        for power in range(exponent):
+            base_factors.append(prime)
+            all_factors.add(prime)
 
-    while len(base_factors):
-        factor1 = base_factors.pop()
+    for group_size in range(2, len(base_factors)):
+        for comb in m_way_unordered_combinations(base_factors, [group_size]):
+            factor = 1
+            for num in comb[0]:
+                factor *= num
+            all_factors.add(factor)
 
-        for factor2 in base_factors:
-            all_factors.append(factor1*factor2)
-
-    if all_factors[-1] != integer:
-        all_factors.append(integer)
-
-    all_factors.sort()
-    return all_factors
+    list_form = list(all_factors)
+    list_form.sort()
+    return list_form
     
         
 def reset():
